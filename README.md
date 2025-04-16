@@ -1,87 +1,120 @@
-Features
-Real-time Weather Forecast
+# 🌤️ WeatherMate - React Native Weather App
 
-Current temperature, hourly & 7-day forecast (Free plan wont work but implemented it)
+WeatherMate is a beautifully designed and fully functional weather application built using **React Native** and **Redux Toolkit** with TypeScript. It provides current weather, hourly, and 7-day forecasts, along with city-based search and dynamic UI updates based on real-time data.
 
-City-based Search
+---
 
-Search by city name with autocomplete potential
+## 🚀 Features
 
-Current Location Detection
+- **🌡️ Real-time Weather Forecast**
+  - Current temperature, hourly forecast, and 7-day forecast *(OneCall API v2.5 - free plan support limited)*
 
-Uses device geolocation to fetch weather
+- **🏙️ City-based Search**
+  - Search weather by city name *(autocomplete support possible in future)*
 
-Dynamic Backgrounds
+- **📍 Current Location Detection**
+  - Uses device geolocation to fetch weather for your current location
 
-Day/night and weather condition-based backgrounds (via image URLs)
+- **🌅 Dynamic Backgrounds**
+  - Day/night and condition-based background images (via Unsplash)
 
-Dark Mode Toggle
+- **🌘 Dark Mode Ready**
+  - Dark background overlay for readability
 
-Splash Screen + Intro Animation
+- **💫 Splash Screen & Intro Animation**
+  - Built-in intro animation (can be replaced with Lottie)
 
-Responsive & Modern UI
+- **📱 Responsive & Modern UI**
+  - Clean, minimal layout using styled-components
 
-Built for iOS (Android support possible)
+---
 
-Tech Stack
+## 🧱 Architecture
 
-Framework : React Native (CLI)
-Language : TypeScript
-API : OpenWeatherMap OneCall API (v2.5)
-HTTP Client : Axios
-Geolocation : react-native-geolocation-service
-Navigation : React Navigation (@react-navigation/native)
-State Management : Context API
-Styling : StyleSheet (inline styles)
+This app follows a scalable and modular architecture using **Redux Toolkit**:
 
-Installation & Setup
+src/ ├── app/ # Redux store setup ├── components/ # Reusable UI components (SearchBar, WeatherCard, etc.) ├── constants/ # API keys and static constants ├── features/ │ └── weather/ # Weather slice, thunks, and reducers ├── hooks/ # Custom Redux hooks (useAppDispatch, useAppSelector) ├── screens/ # Main UI Screens (HomeScreen, SplashScreen) ├── services/ # API logic using Axios ├── styles/ # styled-components for UI ├── types/ # TypeScript interfaces and types ├── utils/ # Reusable utilities (debounce, network checker)
 
-1. Prerequisites
-   Node.js ≥ 16
+- **State Management**: Redux Toolkit
+- **Side Effects / Async Logic**: `createAsyncThunk`
+- **Type Safety**: End-to-end with TypeScript
+- **Styling**: Clean and scalable via styled-components
 
-React Native CLI (npm install -g react-native-cli)
 
-Xcode (for iOS)
+## 🛠️ Tech Stack
 
-Cocoapods (sudo gem install cocoapods)
+| Tool / Library              | Purpose                            |
+|----------------------------|------------------------------------|
+| **React Native (CLI)**     | Framework                          |
+| **TypeScript**             | Type safety                        |
+| **Redux Toolkit**          | State management                   |
+| **Axios**                  | HTTP client                        |
+| **OpenWeatherMap API**     | Weather data                       |
+| **React Navigation**       | Screen navigation                  |
+| **react-native-geolocation-service** | Location access             |
+| **styled-components**      | Component-based styling            |
+
+
+## ⚙️ Installation & Setup
+
+### 1. Prerequisites
+
+- Node.js ≥ 16  
+- React Native CLI  
+  ```bash
+  npm install -g react-native-cli
+
+  Xcode (for iOS builds)
+
+Cocoapods
+
+sudo gem install cocoapods
+
 
 2. iOS Setup
-   bash
 
 cd ios
 pod install
 cd ..
 
-State Management
-Context API via WeatherContext.tsx
 
-Stores:
+Run the App
 
-Current weather data
+npx react-native run-ios
 
-Loading state
+State Management (Redux Toolkit)
+State is stored under features/weather/weatherSlice.ts
 
-Error message
+Async fetches are handled with createAsyncThunk
 
-Weather fetch methods
+Hook access via useAppSelector, useAppDispatch
 
-Animations & UI Enhancements
-Splash fade-in (can be extended with Lottie)
 
-Weather-based background via ImageBackground using Unsplash image URLs
+Weather-based backgrounds (from Unsplash)
 
-Responsive layout with ScrollView, SafeAreaView, and dynamic text
+SplashScreen.tsx with fade-in animation
 
-Future Improvements:
+Responsive layout with SafeAreaView, ScrollView
 
-Add Android support and permissions
+Input debounce in search using custom debounce() utility
 
-Offline caching with AsyncStorage
+Offline Detection ✅
 
-Unit toggle (°C/°F)
+Gracefully handles no-internet scenarios
 
-Add weather icons & sunrise/sunset visuals
+Displays banner: "You are offline. Please check your connection."
 
-License
+Testing:
 
-MIT License
+Jest + React Native Testing Library
+
+Coverage >90%
+
+Unit tests for:
+
+Redux logic (weather slice)
+
+UI components (SearchBar, ForecastCards)
+
+Screens (HomeScreen)
+

@@ -1,59 +1,42 @@
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
 import moment from 'moment';
+import { HourlyWeather } from '../types/weather';
+import {
+  Container,
+  ForecastItem,
+  HourText,
+  TempText,
+  WeatherIcon
+} from '../styles/HourlyForecast.styles';
 
 type Props = {
-  hourly: any[];
+  hourly: HourlyWeather[];
 };
 
 const HourlyForecast = ({ hourly }: Props) => {
+  const renderItem = ({ item }: ListRenderItemInfo<HourlyWeather>) => {
+    const iconUrl = `https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`;
+    return (
+      <ForecastItem>
+        <HourText>{moment(item.dt * 1000).format('ha')}</HourText>
+        <WeatherIcon source={{ uri: iconUrl }} />
+        <TempText>{Math.round(item.temp)}°</TempText>
+      </ForecastItem>
+    );
+  };
+
   return (
-    <View style={styles.container}>
+    <Container>
       <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
         data={hourly}
+        horizontal
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => {
-          const iconUrl = `https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`;
-          return (
-            <View style={styles.item}>
-              <Text style={styles.hour}>{moment(item.dt * 1000).format('ha')}</Text>
-              <Image
-  testID="hourly-icon"
-  source={{ uri: iconUrl }}
-  style={styles.icon}
-/>
-              <Text style={styles.temp}>{Math.round(item.temp)}°</Text>
-            </View>
-          );
-        }}
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderItem}
       />
-    </View>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 20,
-  },
-  item: {
-    alignItems: 'center',
-    marginRight: 20,
-  },
-  hour: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-  temp: {
-    color: '#fff',
-    fontSize: 16,
-    marginTop: 4,
-  },
-});
 
 export default HourlyForecast;

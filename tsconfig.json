@@ -4,7 +4,7 @@
     "module": "esnext",
     "jsx": "react-native",
     "allowJs": true,
-    "strict": false,
+    "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "noEmit": true
   },
+  
   
     "exclude": [
       "node_modules/**/*.flow",

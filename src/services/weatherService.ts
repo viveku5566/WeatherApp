@@ -1,62 +1,44 @@
 import axios from 'axios';
+import { API_KEY, GEO_URL, BASE_URL } from '../constants/api';
+import { ForecastData } from '../types/weather';
 
-const API_KEY = 'dd2df73025961107bff90a1582ab78b1';
-const BASE_URL = 'https://api.openweathermap.org/data/2.5/onecall';
-const GEO_URL = 'https://api.openweathermap.org/geo/1.0/direct';
+export const fetchWeatherByCityAPI = async (city: string): Promise<ForecastData> => {
+  const geoRes = await axios.get(GEO_URL, {
+    params: { q: city, limit: 1, appid: API_KEY },
+  });
 
-
-export const fetchCityWeather = async (city: string) => {
-  try {
-    const geoRes = await axios.get(GEO_URL, {
-      params: {
-        q: city,
-        limit: 1,
-        appid: API_KEY,
-      },
-    });
-
-    if (!geoRes.data || geoRes.data.length === 0) {
-      throw new Error('City not found');
-    }
-
-    const { lat, lon, name } = geoRes.data[0];
-
-    const weatherRes = await axios.get(BASE_URL, {
-      params: {
-        lat,
-        lon,
-        exclude: 'minutely,alerts',
-        units: 'metric',
-        appid: API_KEY,
-      },
-    });
-
-    return {
-      city: name || city,
-      ...weatherRes.data,
-    };
-  } catch (error: any) {
-    console.error('fetchCityWeather error:', error?.response?.data || error.message);
-    throw new Error(error?.response?.data?.message || 'Failed to fetch city weather');
+  if (!geoRes.data || geoRes.data.length === 0) {
+    throw new Error('City not found');
   }
+
+  const { lat, lon, name } = geoRes.data[0];
+
+  const weatherRes = await axios.get(BASE_URL, {
+    params: {
+      lat,
+      lon,
+      exclude: 'minutely,alerts',
+      units: 'metric',
+      appid: API_KEY,
+    },
+  });
+
+  return {
+    city: name,
+    ...weatherRes.data,
+  };
 };
 
+export const fetchWeatherByCoordsAPI = async (lat: number, lon: number): Promise<ForecastData> => {
+  const weatherRes = await axios.get(BASE_URL, {
+    params: {
+      lat,
+      lon,
+      exclude: 'minutely,alerts',
+      units: 'metric',
+      appid: API_KEY,
+    },
+  });
 
-export const fetchWeatherDataByCoords = async (lat: number, lon: number) => {
-  try {
-    const weatherRes = await axios.get(BASE_URL, {
-      params: {
-        lat,
-        lon,
-        exclude: 'minutely,alerts',
-        units: 'metric',
-        appid: API_KEY,
-      },
-    });
-
-    return weatherRes.data;
-  } catch (error: any) {
-    console.error('fetchWeatherDataByCoords error:', error?.response?.data || error.message);
-    throw new Error('Failed to fetch weather by location');
-  }
+  return weatherRes.data;
 };

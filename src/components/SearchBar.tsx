@@ -1,43 +1,33 @@
-import React, { useState, useContext } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
-import { WeatherContext } from '../contexts/WeatherContext';
+import React, { useState } from 'react';
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { fetchWeatherByCity } from '../features/weather/weatherSlice';
+import { debounce } from '../utils/debounce';
+import { Container,InputField, SearchButton } from '../styles/SearchBar.styles';
 
 const SearchBar = () => {
-  const [input, setInput] = useState('');
-  const { fetchCityWeather } = useContext(WeatherContext);
+  const [city, setCity] = useState('');
+  const dispatch = useAppDispatch();
 
-  const onSearch = () => {
-    if (input.trim() !== '') {
-      fetchCityWeather(input.trim());
-      setInput('');
+  const handleSearch = debounce((value: string) => {
+    if (value.trim()) {
+      dispatch(fetchWeatherByCity(value.trim()));
+      setCity('');
     }
-  };
+  }, 800);
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
+    <Container>
+      <InputField
         placeholder="Enter city"
-        value={input}
-        onChangeText={setInput}
+        value={city}
+        onChangeText={(text : string) => {
+          setCity(text);
+          handleSearch(text);
+        }}
       />
-      <Button title="Search" onPress={onSearch} />
-    </View>
+      <SearchButton title="Search" onPress={() => handleSearch(city)} />
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    marginBottom: 12,
-  },
-  input: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    marginRight: 8,
-  },
-});
 
 export default SearchBar;
