@@ -1,4 +1,4 @@
-# 🌤️ WeatherMate - React Native Weather App
+# 🌤️ WeatherMate (WeatherApp) - React Native
 
 WeatherMate is a beautifully designed and fully functional weather application built using **React Native** and **Redux Toolkit** with TypeScript. It provides current weather, hourly, and 7-day forecasts, along with city-based search and dynamic UI updates based on real-time data.
 
@@ -33,7 +33,25 @@ WeatherMate is a beautifully designed and fully functional weather application b
 
 This app follows a scalable and modular architecture using **Redux Toolkit**:
 
-src/ ├── app/ # Redux store setup ├── components/ # Reusable UI components (SearchBar, WeatherCard, etc.) ├── constants/ # API keys and static constants ├── features/ │ └── weather/ # Weather slice, thunks, and reducers ├── hooks/ # Custom Redux hooks (useAppDispatch, useAppSelector) ├── screens/ # Main UI Screens (HomeScreen, SplashScreen) ├── services/ # API logic using Axios ├── styles/ # styled-components for UI ├── types/ # TypeScript interfaces and types ├── utils/ # Reusable utilities (debounce, network checker)
+/src
+├── app/               # Redux store configuration
+├── assets/            # App logos, splash images, etc.
+├── components/        # Reusable UI components (SearchBar, ForecastCards, etc.)
+├── features/weather/  # Redux slice and async thunks for weather
+├── hooks/             # Typed Redux hooks (useAppDispatch, useAppSelector)
+├── screens/           # Page-level views (HomeScreen, SplashScreen)
+├── services/          # API logic using Axios
+├── styles/            # Centralized styled-components definitions
+├── types/             # TypeScript interfaces and global types
+├── utils/             # Utility helpers (debounce.ts, network.ts)
+├── __tests__/         # All Jest unit test files
+│   ├── components/    # Component-specific tests (e.g., SearchBar.test.tsx)
+│   ├── screens/       # Screen-level tests (e.g., HomeScreen.test.tsx)
+│   ├── features/      # Slice/thunk unit tests
+│   └── utils/         # Tests for debounce, network, etc.
+|___
+
+
 
 - **State Management**: Redux Toolkit
 - **Side Effects / Async Logic**: `createAsyncThunk`
@@ -54,33 +72,6 @@ src/ ├── app/ # Redux store setup ├── components/ # Reusable UI comp
 | **react-native-geolocation-service** | Location access             |
 | **styled-components**      | Component-based styling            |
 
-
-## ⚙️ Installation & Setup
-
-### 1. Prerequisites
-
-- Node.js ≥ 16  
-- React Native CLI  
-  ```bash
-  npm install -g react-native-cli
-
-  Xcode (for iOS builds)
-
-Cocoapods
-
-sudo gem install cocoapods
-
-
-2. iOS Setup
-
-cd ios
-pod install
-cd ..
-
-
-Run the App
-
-npx react-native run-ios
 
 State Management (Redux Toolkit)
 State is stored under features/weather/weatherSlice.ts
@@ -117,4 +108,33 @@ Redux logic (weather slice)
 UI components (SearchBar, ForecastCards)
 
 Screens (HomeScreen)
+
+
+## ⚙️ Installation & Setup
+
+### 1. Prerequisites
+
+- Node.js ≥ 16  
+- React Native CLI
+  
+  npm install -g react-native-cli
+
+  Xcode (for iOS builds)
+
+Cocoapods
+
+sudo gem install cocoapods
+
+
+2. iOS Setup
+
+cd weatherApp
+cd ios
+pod install
+
+
+Run the App
+
+npx react-native run-ios
+
 
