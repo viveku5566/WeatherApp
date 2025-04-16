@@ -1,68 +1,71 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import SearchBar from '../src/components/SearchBar';
-import { WeatherContext } from '../src/contexts/WeatherContext';
-import { WeatherContextType } from '../src/contexts/WeatherContext.types';
+import { fetchWeatherByCity } from '../src/features/weather/weatherSlice';
 
-describe('SearchBar Component', () => {
-  const mockFetchCityWeather = jest.fn();
+jest.mock('../src/features/weather/weatherSlice', () => ({
+  ...jest.requireActual('../src/features/weather/weatherSlice'),
+  fetchWeatherByCity: jest.fn((city: string) => ({ type: 'weather/fetchWeatherByCity', payload: city })),
+}));
 
-  const mockContext: WeatherContextType = {
-    data: null,
-    loading: false,
-    error: '',
-    fetchCityWeather: mockFetchCityWeather,
-    fetchCurrentLocationWeather: jest.fn(),
-  };
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+const renderWithStore = (store: any) => (
+  render(
+    <Provider store={store}>
+      <SearchBar />
+    </Provider>
+  )
+);
+
+describe('🔍 SearchBar Component', () => {
+  let store: ReturnType<typeof mockStore>;
 
   beforeEach(() => {
+    store = mockStore({
+      weather: {
+        data: null,
+        loading: false,
+        error: '',
+      },
+    });
+
+    store.dispatch = jest.fn();
     jest.clearAllMocks();
   });
 
-  it('renders input and button', () => {
-    const { getByPlaceholderText, getByText } = render(
-      <WeatherContext.Provider value={mockContext}>
-        <SearchBar />
-      </WeatherContext.Provider>
-    );
-
+  it('renders input and button correctly', () => {
+    const { getByPlaceholderText, getByText } = renderWithStore(store);
     expect(getByPlaceholderText('Enter city')).toBeTruthy();
     expect(getByText('Search')).toBeTruthy();
   });
 
-  it('calls fetchCityWeather when a valid city is entered', () => {
-    const { getByPlaceholderText, getByText } = render(
-      <WeatherContext.Provider value={mockContext}>
-        <SearchBar />
-      </WeatherContext.Provider>
-    );
+  it('dispatches fetchWeatherByCity on valid input', () => {
+    const { getByPlaceholderText, getByText } = renderWithStore(store);
 
     const input = getByPlaceholderText('Enter city');
-    const button = getByText('Search');
-
     fireEvent.changeText(input, 'Delhi');
-    fireEvent.press(button);
+    fireEvent.press(getByText('Search'));
 
-    expect(mockFetchCityWeather).toHaveBeenCalledWith('Delhi');
+    expect(fetchWeatherByCity).toHaveBeenCalledWith('Delhi');
+    expect(store.dispatch).toHaveBeenCalled();
   });
 
-  it('does not call fetchCityWeather when input is empty', () => {
-    const { getByText } = render(
-      <WeatherContext.Provider value={mockContext}>
-        <SearchBar />
-      </WeatherContext.Provider>
-    );
+  it('does not dispatch action for empty input', () => {
+    const { getByText } = renderWithStore(store);
 
     fireEvent.press(getByText('Search'));
-    expect(mockFetchCityWeather).not.toHaveBeenCalled();
+
+    expect(fetchWeatherByCity).not.toHaveBeenCalled();
+    expect(store.dispatch).not.toHaveBeenCalled();
   });
 
-  it('clears input after pressing search', () => {
-    const { getByPlaceholderText, getByText } = render(
-      <WeatherContext.Provider value={mockContext}>
-        <SearchBar />
-      </WeatherContext.Provider>
-    );
+  it('clears input after dispatch', () => {
+    const { getByPlaceholderText, getByText } = renderWithStore(store);
 
     const input = getByPlaceholderText('Enter city');
     fireEvent.changeText(input, 'Mumbai');
