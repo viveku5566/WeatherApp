@@ -33,30 +33,23 @@ WeatherMate is a beautifully designed and fully functional weather application b
 
 This app follows a scalable and modular architecture using **Redux Toolkit**:
 
-/src
-├── app/               # Redux store configuration
-├── assets/            # App logos, splash images, etc.
-├── components/        # Reusable UI components (SearchBar, ForecastCards, etc.)
-├── features/weather/  # Redux slice and async thunks for weather
-├── hooks/             # Typed Redux hooks (useAppDispatch, useAppSelector)
-├── screens/           # Page-level views (HomeScreen, SplashScreen)
-├── services/          # API logic using Axios
-├── styles/            # Centralized styled-components definitions
-├── types/             # TypeScript interfaces and global types
-├── utils/             # Utility helpers (debounce.ts, network.ts)
-├── __tests__/         # All Jest unit test files
-│   ├── components/    # Component-specific tests (e.g., SearchBar.test.tsx)
-│   ├── screens/       # Screen-level tests (e.g., HomeScreen.test.tsx)
-│   ├── features/      # Slice/thunk unit tests
-│   └── utils/         # Tests for debounce, network, etc.
-|___
+<pre> src/ ├── app/ # Redux store setup ├── assets/ # Static assets like logos ├── components/ # UI components (SearchBar, ForecastCards, etc.) ├── features/weather/ # Weather slice, async thunks (fetchWeatherByCity, fetchWeatherByCoords) ├── hooks/ # Typed Redux hooks (useAppDispatch, useAppSelector) ├── screens/ # Screen-level views (HomeScreen, SplashScreen) ├── services/ # Weather API calls (Axios + OpenWeatherMap) ├── styles/ # Styled-components definitions ├── types/ # Global TypeScript interfaces ├── utils/ # Utility helpers (debounce.ts, network.ts) ├── __tests__/ # Unit tests │ ├── components/ # e.g., SearchBar.test.tsx │ ├── screens/ # e.g., HomeScreen.test.tsx │ ├── features/ # Redux slice/thunk tests │ └── utils/ # Utility test cases (network/debounce) └── __mocks__/ # Jest mocks (optional) </pre>
 
+Architecture Highlights
+State Management: Redux Toolkit
 
+Side Effects: createAsyncThunk for async logic
 
-- **State Management**: Redux Toolkit
-- **Side Effects / Async Logic**: `createAsyncThunk`
-- **Type Safety**: End-to-end with TypeScript
-- **Styling**: Clean and scalable via styled-components
+Styling: styled-components for reusable, scoped styles
+
+Type Safety: Built fully with TypeScript
+
+Offline Support: Uses @react-native-community/netinfo to gracefully handle no-internet cases
+
+Code Quality: ESLint + Prettier integrated
+
+Testing: Jest with over 90% test coverage
+
 
 
 ## 🛠️ Tech Stack
@@ -69,7 +62,7 @@ This app follows a scalable and modular architecture using **Redux Toolkit**:
 | **Axios**                  | HTTP client                        |
 | **OpenWeatherMap API**     | Weather data                       |
 | **React Navigation**       | Screen navigation                  |
-| **react-native-geolocation-service** | Location access             |
+| **react-native-geolocation-service** | Location access          |
 | **styled-components**      | Component-based styling            |
 
 
